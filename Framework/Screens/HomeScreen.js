@@ -1,41 +1,65 @@
 // HomeScreen.js
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView, Image, TouchableOpacity, SafeAreaView, StatusBar, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TextInput, ScrollView, Image, TouchableOpacity, SafeAreaView, StatusBar, FlatList, Dimensions } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Carousel from 'react-native-reanimated-carousel';
+
+
 
 const storiesData = [
-
-  'Friends',  'Groups',  'Pages',  'Events',  'Events',  'Marketplace',
-    
-  
+  { name: 'Friends', image: 'https://cdn-icons-png.flaticon.com/512/4951/4951182.png' },
+  { name: 'Groups', image: 'https://thumbs.dreamstime.com/b/icon-educational-study-groups-icon-educational-study-groups-351942438.jpg' },
+  { name: 'Pages', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWcb2eCz81UgezU85Yl-a8qT22TaEPSfhUhg&s' },
+  { name: 'Events', image: 'https://cdn-icons-png.flaticon.com/512/6079/6079964.png' },
+  { name: 'Marketplace', image: 'https://cdn-icons-png.flaticon.com/512/9198/9198446.png' }
 ];
-
-
 
 const postsData = [
   {
-    name: 'pepper pots', details: 'Chef at Emirate Foods • 5 mins ago', text: 'Here’s a delicious and healthy salad recipe to try out this weekend! 🥗🍅', likes: 684, comments: 245, shares: 102
+    name: 'Savannah Nguyen',
+    details: 'Chef at Emirate Foods • 5 mins ago',
+    text: 'Here’s a delicious and healthy salad recipe to try out this weekend! ',
+    likes: 684,
+    comments: 245,
+    shares: 102,
+    profilePic: 'https://randomuser.me/api/portraits/women/15.jpg',
+    postImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTatLiJAG6jse2XTu96VcidI8X5OYIvWzcenw&s'
   },
   {
-    name: 'Bruce banner', details: 'Food Blogger • 15 mins ago', text: 'Made this creamy avocado toast for brunch today. So simple, so good! 🥑🍞', likes: 512, comments: 132, shares: 67
+    name: 'Cody Fisher',
+    details: 'Food Blogger • 15 mins ago',
+    text: 'Made this creamy avocado toast for brunch today. So simple, so good! ',
+    likes: 512,
+    comments: 132,
+    shares: 67,
+    profilePic: 'https://randomuser.me/api/portraits/men/16.jpg',
+    postImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfjhkUsJa4nFmUhaf69WdfrRca0zbetiMmjQ&s'
   },
   {
-    name: 'Wade Wilson', details: 'Nutritionist • 30 mins ago', text: 'Hydration is key! Don’t forget to drink your water and eat your greens 🌿💧', likes: 389, comments: 98, shares: 40
+    name: 'Wade Warren',
+    details: 'Nutritionist • 30 mins ago',
+    text: 'Hydration is key! Don’t forget to drink your water and eat your greens ',
+    likes: 389,
+    comments: 98,
+    shares: 40,
+    profilePic: 'https://randomuser.me/api/portraits/men/17.jpg',
+    postImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyDywZygHNZKNoXZNF_26ainkkq6bjD2GU5Q&s'
   }
 ];
 
-const HomeScreen = () => {
+const Home = () => {
   const renderStory = (item, index) => (
     <View key={index} style={styles.storyItem}>
-      <Image source={item.image } style={styles.storyImage} />
-      <Text style={styles.storyText}>{item}</Text>
+      <Image source={{ uri: item.image }} style={styles.storyImage} />
+      <Text style={styles.storyText}>{item.name}</Text>
     </View>
   );
 
   const renderPost = ({ item }) => (
     <View style={styles.postContainer}>
       <View style={styles.postHeader}>
-        <Image source={{ uri: 'https://via.placeholder.com/50' }} style={styles.profilePic} />
+        <Image source={{ uri: item.profilePic }} style={styles.profilePic} />
         <View style={{ marginLeft: 10 }}>
           <Text style={styles.profileName}>{item.name} <Text style={styles.following}>• Following</Text></Text>
           <Text style={styles.profileDetails}>{item.details}</Text>
@@ -44,7 +68,7 @@ const HomeScreen = () => {
 
       <Text style={styles.postText}>{item.text}</Text>
 
-      <Image source={{ uri: 'https://via.placeholder.com/400x200' }} style={styles.postImage} />
+      <Image source={{ uri: item.postImage }} style={styles.postImage} />
 
       <View style={styles.actionRow}>
         <TouchableOpacity style={styles.actionButton}>
@@ -65,6 +89,14 @@ const HomeScreen = () => {
     </View>
   );
 
+   const carouselLinks = [
+        "https://images.pexels.com/photos/534228/pexels-photo-534228.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        "https://images.pexels.com/photos/3760072/pexels-photo-3760072.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        "https://images.pexels.com/photos/4495803/pexels-photo-4495803.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    ];
+
+
+
   return (
     <SafeAreaView style={styles.safeContainer}>
       <StatusBar barStyle="dark-content" />
@@ -78,6 +110,21 @@ const HomeScreen = () => {
           </TouchableOpacity>
         </View>
 
+         <View style={{ marginVertical: 10, }}>
+                        <Carousel
+                            loop
+                            width={width - 30}
+                            height={150}
+                            autoPlay={true}
+                            data={carouselLinks}
+                            style={{ borderRadius: 10 }}
+                            scrollAnimationDuration={2000}
+                            renderItem={({ index }) => (
+                                <Image style={{ width: '100%', height: 150, borderRadius: 10, }} source={{ uri: carouselLinks[index] }} />
+                            )}
+                        />
+                    </View>
+
         <FlatList
           ListHeaderComponent={
             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.storiesContainer}>
@@ -90,36 +137,12 @@ const HomeScreen = () => {
           contentContainerStyle={{ paddingBottom: 80 }}
         />
 
-  
-        <View style={styles.bottomNav}>
-          <TouchableOpacity>
-            <FontAwesome name="home" size={24} color="black" />
-            <Text style={styles.navText}>Home</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity>
-            <FontAwesome name="users" size={24} color="black" />
-            <Text style={styles.navText}>Friends</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity>
-            <FontAwesome name="plus-circle" size={24} color="black" />
-            <Text style={styles.navText}>Create</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity>
-            <FontAwesome name="bell-o" size={24} color="black" />
-            <Text style={styles.navText}>Notifications</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity>
-            <FontAwesome name="user" size={24} color="black" />
-            <Text style={styles.navText}>Profile</Text>
-          </TouchableOpacity>
-        </View>
-
       </View>
+
+      
     </SafeAreaView>
+
+    
   );
 };
 
@@ -150,19 +173,19 @@ const styles = StyleSheet.create({
   storiesContainer: {
     flexDirection: 'row',
     paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderRadius: 10
+    paddingHorizontal: 10
+    
+    
   },
   storyItem: {
     alignItems: 'center',
     marginRight: 15,
-
   },
   storyImage: {
     width: 60,
     height: 60,
     borderRadius: 30,
-    borderColor: "black",
+    borderColor: 'blue',
     borderWidth: 2
   },
   storyText: {
@@ -183,9 +206,7 @@ const styles = StyleSheet.create({
   profilePic: {
     width: 50,
     height: 50,
-    borderRadius: 25,
-    borderColor: "black",
-    borderWidth: 1
+    borderRadius: 25
   },
   profileName: {
     fontWeight: 'bold'
@@ -217,18 +238,53 @@ const styles = StyleSheet.create({
   },
   actionText: {
     marginLeft: 5
-  },
-  bottomNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 10,
-    borderTopWidth: 1,
-    borderColor: '#ddd'
-  },
-  navText: {
-    fontSize: 12,
-    textAlign: 'center'
   }
 });
 
-export default HomeScreen;
+// export default HomeScreen;
+
+export default Home;
+
+const tab = createBottomTabNavigator();
+
+export function HomeScreen(){
+  const { width, height} = Dimensions
+
+
+    return (
+        <Tab.Navigator
+            screenOptions={({ route }) => ({
+                tabBarIcon: ({ focused, color }) => {
+                    let iconName;
+                    let size;
+                    if (route.name === 'Home') {
+                        size = focused ? 35 : 23
+                        iconName = focused ? 'home' : 'home-outline';
+                    }
+                    else if (route.name === 'PostProduct') {
+                        size = focused ? 35 : 23
+                        iconName = focused ? 'bag-add' : 'bag-add-outline';
+                    }
+                    else if (route.name === 'Cart') {
+                        size = focused ? 35 : 23
+                        iconName = focused ? 'cart' : 'cart-outline';
+                    }
+                    else if (route.name === 'Profile') {
+                        size = focused ? 35 : 23
+                        iconName = focused ? 'person' : 'person-outline';
+                    }
+
+                    return <Ionicons name={iconName} size={size} color={color} />;
+                },
+                tabBarActiveTintColor: Theme.colors.primary,
+                tabBarInactiveTintColor: Theme.colors.gray,
+                headerShown: false,
+            })}
+        >
+            <Tab.Screen name="Home" component={Home} />
+            <Tab.Screen name="PostProduct" component={PostProduct} options={{ title: "Post Ads" }} />
+            <Tab.Screen name="Cart" component={Cart} />
+            <Tab.Screen name="Profile" component={Profile} options={{ title: "Account" }} />
+        </Tab.Navigator>
+    );
+}
