@@ -57,7 +57,7 @@ const Home = () => {
   );
 
   const renderPost = ({ item }) => (
-    <View style={styles.postContainer}>
+    <View  style={styles.postContainer}>   
       <View style={styles.postHeader}>
         <Image source={{ uri: item.profilePic }} style={styles.profilePic} />
         <View style={{ marginLeft: 10 }}>
@@ -248,7 +248,7 @@ export default Home;
 const tab = createBottomTabNavigator();
 
 export function HomeScreen(){
-  const { width, height} = Dimensions
+  const { width, height } = Dimensions.get("window");
 
 
     return (
